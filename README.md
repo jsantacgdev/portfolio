@@ -1,13 +1,13 @@
 # Portfolio
 
-Personal portfolio built with [Astro](https://astro.build) as a static site, with hand-written CSS and no UI framework.
+Personal portfolio built with [Astro](https://astro.build) as a static, single-page site, with hand-written CSS and no UI framework.
 
 ## Stack
 
 - **Astro** (static output) + TypeScript in strict mode
 - **Content collections**: one MDX file per project and language, validated with a Zod schema
-- **`astro:assets`** for screenshots (AVIF/WebP, responsive sizes, lazy loading)
-- **Self-hosted fonts** via Fontsource: Instrument Serif, Instrument Sans, JetBrains Mono
+- **`astro:assets`** for app icons and screenshots (AVIF/WebP, responsive sizes, lazy loading)
+- **Inter** self-hosted via Fontsource, **Lucide** icons
 - **Vercel** for hosting
 
 ## Languages
@@ -18,20 +18,19 @@ The site is published in Spanish (`/es/`) and English (`/en/`) and has no langua
 
 ```text
 src/
-├── content/projects/{es,en}/*.mdx   # project case studies
+├── content/projects/{es,en}/*.mdx   # project data: description, decisions, features, screens
 ├── content.config.ts                # project schema
-├── assets/projects/<slug>/          # app screenshots
-├── components/                      # Phone, Gallery, StatList, Decision…
-├── i18n/                            # interface strings for both languages
+├── assets/projects/<slug>/          # app icon and screenshots
+├── components/                      # Hero, ProjectSection, Screens, StatsBand, About, Contact…
+├── i18n/                            # interface copy for both languages
 ├── layouts/BaseLayout.astro
 ├── pages/
 │   ├── index.astro                  # language redirect
-│   ├── [lang]/index.astro           # home
-│   └── [lang]/[slug].astro          # project page
+│   └── [lang]/index.astro           # the page itself
 └── styles/global.css                # design tokens and base styles
 ```
 
-Adding a project means adding `src/content/projects/es/<slug>.mdx` and its `en` counterpart; the build fails if a translation is missing.
+Adding a project means adding `src/content/projects/es/<slug>.mdx` and its `en` counterpart; the build fails if a translation is missing. Screens without an image show a placeholder until a screenshot is added with `src`.
 
 ## Commands
 
