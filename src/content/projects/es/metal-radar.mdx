@@ -1,0 +1,55 @@
+---
+title: Metal Radar
+tagline: Conciertos de metal cerca de ti, tu diario de conciertos y gente con quien ir.
+summary: App móvil para descubrir conciertos y festivales de las bandas que sigues, llevar el diario de los que has visto y organizarte con otros fans. El backend corre sobre Supabase, con Postgres y seguridad por fila, autenticación, almacenamiento y 25 funciones serverless.
+order: 2
+accent: '#CF2E24'
+period: Junio – agosto de 2026
+role: 'Proyecto personal: diseño, app y backend'
+status: Preparando la publicación en Google Play
+stack:
+  - React Native · Expo
+  - TypeScript
+  - TanStack Query
+  - Supabase
+  - PostgreSQL
+  - Deno
+  - Leaflet
+  - i18next
+  - Sentry
+stats:
+  - value: '25'
+    label: funciones serverless en Deno
+  - value: '11'
+    label: servicios externos integrados
+  - value: '29'
+    label: pantallas
+---
+
+{/*
+PENDIENTE DE REDACTAR (siguiente paso). Guion a partir del código:
+
+Funcionalidades (irán en `features`, en el frontmatter):
+
+- Radar: recomendaciones "Para ti" con % de afinidad; al seguir una banda se sincronizan sus conciertos.
+- Mapa: conciertos y festivales por distancia real, agrupados por sala, radio configurable.
+- Diario: interesado / voy / asistí, valoración, notas, fotos, añadir al calendario.
+- Setlists: el real (Setlist.fm) o una predicción si el concierto es futuro; exportar a Spotify.
+- Estadísticas y "Wrapped" anual con póster tipo cartel de festival.
+- Social: seguidores y cuentas privadas, feed, quién va, comentarios con hilos, "tengo hueco en el coche", mensajes privados.
+- Moderación: reportes, bloqueos, panel de moderación, suspensiones.
+- Importación de carteles de festival con IA (herramienta interna).
+- Cuenta: borrado total de datos, castellano / inglés, notificaciones push.
+
+Decisiones (irán aquí, con <Decision title="…">):
+
+1. Sin servidor propio: Supabase + Edge Functions. Las claves de terceros (Ticketmaster, Spotify, Anthropic…) nunca viajan en la app.
+2. Recomendaciones explicables sin ML: artistas similares de Last.fm (6 puntos) y etiquetas compartidas (3), descartando etiquetas genéricas ("rock", "seen live"…) y con cupo por banda seguida para que haya variedad.
+3. La IA propone y una persona confirma: el cartel se lee con Claude, pero se revisa en una pantalla editable (bandas existentes / nuevas) antes de escribir nada.
+4. Seguridad en la base de datos, no solo en la interfaz: auditoría que encontró que un usuario podía hacerse admin (RLS es por fila, no por columna) → trigger. Mensajes privados: solo se puede editar read_at.
+5. Mensajes por sondeo (5 s en el chat, 15 s en la lista) en vez de tiempo real: suficiente para un chat entre conocidos y sin conexiones abiertas que gestionar.
+6. Cron sin solaparse: bloqueo por fila en vez de advisory locks, que no son fiables con PgBouncer en modo transacción. Reintento real de los push fallidos.
+7. Privacidad: Sentry sin datos personales, borrado de cuenta completo, política de privacidad y términos publicados.
+
+Qué haría distinto: tests automáticos; migraciones versionadas en vez de scripts SQL aplicados a mano (en NBA Scores ya lo hice así).
+*/}
