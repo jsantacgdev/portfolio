@@ -1,0 +1,44 @@
+---
+// La raíz no tiene contenido propio: manda al visitante a /es/ o /en/ según el idioma
+// de su sistema. En Vercel lo resuelve antes una redirección (vercel.json) con la
+// cabecera Accept-Language; este script es la red de seguridad para `astro dev`,
+// `astro preview` o cualquier otro alojamiento. Misma regla en ambos sitios: si el
+// primer idioma es castellano, catalán, gallego o euskera → /es/; si no → /en/.
+import '../styles/global.css';
+import { SITE } from '../config';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{SITE.name}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" hreflang="es" href="/es/" />
+    <link rel="alternate" hreflang="en" href="/en/" />
+    <script is:inline>
+      (function () {
+        var primary = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+        var lang = /^(es|ca|gl|eu)\b/i.test(primary) ? 'es' : 'en';
+        location.replace('/' + lang + '/');
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <main class="wrap">
+        <p>
+          <a href="/es/" lang="es">
+            Español
+          </a>{' '}
+          ·{' '}
+          <a href="/en/" lang="en">
+            English
+          </a>
+        </p>
+      </main>
+    </noscript>
+  </body>
+</html>
