@@ -1,0 +1,79 @@
+---
+import Icon from './Icon.astro';
+import { useTranslations, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="wrap hero">
+  <p class="badge">
+    <span class="dot" aria-hidden="true"></span>
+    {t.hero.badge}
+  </p>
+  <h1>{t.hero.title}</h1>
+  <p class="lede">{t.hero.body}</p>
+  <div class="actions">
+    <a class="btn btn-primary" href={`#${t.anchors.projects}`}>
+      {t.hero.primary}
+      <Icon name="arrow-down" size={20} />
+    </a>
+    <a class="btn btn-secondary" href={`#${t.anchors.contact}`}>
+      {t.hero.secondary}
+    </a>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(4rem, 2rem + 9vw, 9rem) clamp(5rem, 3rem + 8vw, 12rem);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 1.15rem;
+    font-size: clamp(0.9rem, 0.85rem + 0.2vw, 1.05rem);
+    color: var(--text-2);
+    background: #2a2641;
+    border: 1px solid #3d3661;
+    border-radius: 999px;
+  }
+
+  .dot {
+    flex: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  h1 {
+    max-width: 15.5em;
+    margin-top: 1.75rem;
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 4.6rem);
+    line-height: 1.17;
+    letter-spacing: -0.025em;
+  }
+
+  .lede {
+    max-width: 57ch;
+    margin-top: 1.75rem;
+    font-size: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.85;
+    color: var(--text-2);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+</style>

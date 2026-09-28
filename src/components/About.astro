@@ -1,0 +1,95 @@
+---
+import { useTranslations, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section id={t.anchors.about} class="wrap about" aria-labelledby="about-title">
+  <div class="intro">
+    <p class="kicker">{t.about.kicker}</p>
+    <h2 id="about-title">{t.about.title}</h2>
+    <p class="body">{t.about.body}</p>
+  </div>
+
+  <div class="timeline">
+    <h3 class="label">{t.about.timelineHeading}</h3>
+    <ul role="list">
+      {t.about.timeline.map((item) => (
+        <li>
+          <p class="item-title">{item.title}</p>
+          <p class:list={['meta', { highlight: item.highlight }]}>{item.meta}</p>
+          {item.detail && <p class="detail">{item.detail}</p>}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .about {
+    display: grid;
+    gap: 4rem;
+    padding-block: clamp(5rem, 3rem + 6vw, 9rem);
+  }
+
+  @media (min-width: 60rem) {
+    .about {
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+    }
+  }
+
+  h2 {
+    max-width: 14em;
+    margin-top: 1.5rem;
+    font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.75rem);
+    line-height: 1.2;
+  }
+
+  .body {
+    max-width: 34em;
+    margin-top: 1.75rem;
+    font-size: clamp(1.1rem, 1rem + 0.4vw, 1.35rem);
+    line-height: 1.8;
+    color: var(--text-2);
+  }
+
+  .timeline ul {
+    display: grid;
+    gap: 2rem;
+    margin-top: 1.75rem;
+  }
+
+  .timeline li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 0.4rem 1.5rem;
+  }
+
+  .item-title {
+    font-size: clamp(1.1rem, 1.05rem + 0.2vw, 1.3rem);
+    color: var(--text);
+  }
+
+  .meta {
+    font-size: 1.1rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .meta.highlight {
+    color: var(--accent);
+  }
+
+  .detail {
+    grid-column: 1 / -1;
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+</style>

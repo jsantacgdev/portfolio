@@ -1,0 +1,63 @@
+---
+import { useTranslations, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="band">
+  <dl class="wrap stats">
+    {t.stats.map((stat) => (
+      <div>
+        <dt>{stat.label}</dt>
+        <dd>{stat.value}</dd>
+      </div>
+    ))}
+  </dl>
+</section>
+
+<style>
+  .band {
+    margin-top: clamp(5rem, 3rem + 6vw, 9rem);
+    background: linear-gradient(100deg, var(--band-from) 0%, var(--band-to) 45%);
+  }
+
+  .stats {
+    display: grid;
+    gap: 2rem;
+    padding-block: clamp(3rem, 2rem + 3vw, 4.5rem);
+  }
+
+  @media (min-width: 48rem) {
+    .stats {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* La etiqueta va antes en el HTML (dt → dd) pero se lee debajo de la cifra. */
+  .stats div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  dd {
+    font-size: clamp(2.4rem, 2rem + 1.4vw, 3.3rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  dt {
+    max-width: 26ch;
+    font-size: clamp(1.05rem, 1rem + 0.25vw, 1.25rem);
+    line-height: 1.5;
+    color: #c8cae9;
+  }
+</style>

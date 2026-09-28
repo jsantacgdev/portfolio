@@ -1,0 +1,75 @@
+---
+import Icon from './Icon.astro';
+import { SITE } from '../config';
+import { useTranslations, type Locale } from '../i18n';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section id={t.anchors.contact} class="wrap contact" aria-labelledby="contact-title">
+  <h2 id="contact-title">{t.contact.title}</h2>
+  <p>{t.contact.body}</p>
+  <ul role="list" class="actions">
+    {SITE.email && (
+      <li>
+        <a class="btn btn-primary" href={`mailto:${SITE.email}`}>
+          <Icon name="mail" size={20} />
+          {SITE.email}
+        </a>
+      </li>
+    )}
+    <li>
+      <a class="btn btn-secondary" href={SITE.github} rel="me">
+        <Icon name="github" size={20} />
+        GitHub
+      </a>
+    </li>
+    {SITE.linkedin && (
+      <li>
+        <a class="btn btn-secondary" href={SITE.linkedin} rel="me">
+          <Icon name="linkedin" size={20} />
+          LinkedIn
+        </a>
+      </li>
+    )}
+  </ul>
+</section>
+
+<style>
+  .contact {
+    padding-block: clamp(4rem, 3rem + 5vw, 9rem) clamp(4rem, 3rem + 4vw, 7rem);
+  }
+
+  h2 {
+    max-width: 15em;
+    font-size: clamp(2.2rem, 1.4rem + 3vw, 4rem);
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+  }
+
+  p {
+    max-width: 40em;
+    margin-top: 1.75rem;
+    font-size: clamp(1.1rem, 1rem + 0.4vw, 1.35rem);
+    line-height: 1.75;
+    color: var(--text-2);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  /* Un email largo no debe desbordar en pantallas estrechas. */
+  .actions a {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+</style>
