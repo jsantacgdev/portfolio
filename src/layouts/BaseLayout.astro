@@ -1,8 +1,5 @@
 ---
-import '@fontsource/instrument-serif/400.css';
-import '@fontsource/instrument-serif/400-italic.css';
-import '@fontsource-variable/instrument-sans';
-import '@fontsource-variable/jetbrains-mono';
+import '@fontsource-variable/inter';
 import '../styles/global.css';
 
 import Header from '../components/Header.astro';
@@ -13,7 +10,7 @@ interface Props {
   lang: Locale;
   title: string;
   description: string;
-  /** Ruta de la página sin el prefijo de idioma, p. ej. `/` o `/nba-scores/`. */
+  /** Ruta de la página sin el prefijo de idioma, p. ej. `/`. */
   path: string;
 }
 
@@ -45,7 +42,7 @@ const ogLocale = { es: 'es_ES', en: 'en_US' }[lang];
     <meta name="twitter:card" content="summary" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#f3efe6" />
+    <meta name="theme-color" content="#171926" />
     <link rel="sitemap" href="/sitemap-index.xml" />
   </head>
   <body>

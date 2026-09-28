@@ -11,63 +11,21 @@ const t = useTranslations(lang);
 const year = new Date().getFullYear();
 ---
 
-<footer class="site-footer">
-  <div class="wrap inner">
-    <div>
-      <h2 class="kicker">{t.footer.contact}</h2>
-      <ul role="list" class="contact">
-        {SITE.email && (
-          <li>
-            <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-          </li>
-        )}
-        <li>
-          <a href={SITE.github} rel="me">
-            GitHub
-          </a>
-        </li>
-        {SITE.linkedin && (
-          <li>
-            <a href={SITE.linkedin} rel="me">
-              LinkedIn
-            </a>
-          </li>
-        )}
-      </ul>
-    </div>
-    <p class="copy">
-      © {year} {SITE.name}
-    </p>
-  </div>
+<footer class="wrap site-footer">
+  <p>
+    © {year} {SITE.fullName}
+  </p>
+  <p>{t.footer.credit}</p>
 </footer>
 
 <style>
   .site-footer {
-    margin-top: var(--space-3xl);
-    border-top: 1px solid var(--line);
-  }
-
-  .inner {
     display: flex;
     flex-wrap: wrap;
-    align-items: end;
     justify-content: space-between;
-    gap: var(--space-l);
-    padding-block: var(--space-xl);
-  }
-
-  .contact {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2xs) var(--space-l);
-    margin-top: var(--space-xs);
-    font-family: var(--font-display);
-    font-size: var(--step-2);
-    line-height: 1.2;
-  }
-
-  .copy {
-    font-size: var(--step--1);
-    color: var(--ink-3);
+    gap: 0.5rem 2rem;
+    padding-block: 2.5rem 4rem;
+    font-size: 1.05rem;
+    color: var(--muted);
   }
 </style>
