@@ -1,35 +1,36 @@
 ---
 title: NBA Scores
-tagline: Resultados, estadísticas y predicciones de la NBA, en castellano.
-summary: App móvil para seguir la NBA más allá del marcador. Incluye box scores, clasificaciones, la historia de cada jugador, contratos y una probabilidad de victoria para cada partido. La alimenta un proceso en Python que reúne varias fuentes de datos en una base de datos Postgres.
 order: 1
-accent: '#E89154'
-period: Desde mayo de 2026
-role: 'Proyecto personal: diseño, app, base de datos y ETL'
-status: En desarrollo activo
+icon: ../../../assets/projects/nba-scores/icon.png
+kicker: App móvil
+role: Diseño, desarrollo y datos
+description: La NBA en castellano, sin rodeos. Marcadores en directo, clasificaciones, fichas de jugadores y comparativas cara a cara, en una app que abro yo mismo cada mañana.
 stack:
   - React Native · Expo
   - TypeScript
-  - TanStack Query
-  - Supabase
-  - PostgreSQL
-  - Python
-  - GitHub Actions
-stats:
-  - value: 66 %
-    label: de acierto del modelo de predicción en 4.920 partidos
-  - value: '< 1 min'
-    label: de sincronización diaria (antes tardaba 15)
-  - value: '60'
-    label: migraciones SQL versionadas
+  - Supabase · Postgres
+  - Python ETL
+decisions:
+  - lead: '15′ → <1′'
+    text: Sincronización diaria rehecha partido a partido en lugar de jugador a jugador.
+  - icon: table
+    text: 'Clasificaciones calculadas al vuelo con vistas SQL: siempre exactas, sin cron jobs.'
+  - icon: award
+    text: 'MVP de cada partido con el Game Score de Hollinger: fiable y a coste cero, sin recurrir a un LLM.'
+screens:
+  layout: trio
+  items:
+    - label: Marcadores
+    - label: Partido en directo
+    - label: Clasificación
 links:
   repo: https://github.com/jsantacgdev/nba-score
 ---
 
 {/*
-PENDIENTE DE REDACTAR (siguiente paso). Guion a partir del código:
+Notas sacadas del código para ampliar el proyecto más adelante (no se muestran en la web).
 
-Funcionalidades (irán en `features`, en el frontmatter):
+Funcionalidades:
 
 - Partidos: calendario por días, marcador en directo, box score, quintetos, MVP (Game Score de Hollinger), enfrentamientos directos y forma.
 - Probabilidad de victoria por partido con desglose de factores (nivel, campo, descanso, bajas) y balance público de aciertos.
@@ -38,16 +39,15 @@ Funcionalidades (irán en `features`, en el frontmatter):
 - Equipos: plantilla, palmarés, situación salarial, lesionados. Draft con Rookie del Año.
 - Novedades: noticias de ESPN Deportes, lesiones y traspasos. Favoritos, notificaciones y búsqueda global.
 
-Decisiones (irán aquí, con <Decision title="…">):
+Otras decisiones:
 
 1. La app solo habla con mi base de datos; el ETL en Python es lo único que toca fuentes externas. Excepción consciente: el directo.
-2. Sincronizar por partido y no por jugador: de ~15 min a menos de 1 (500 peticiones → una por partido).
-3. Clasificación calculada en Postgres, no almacenada. Bug de la Copa NBA (Detroit 118-44 en vez de 59-22) y cómo se detectó.
-4. Modelo de predicción sencillo y explicable, en SQL: margen medio regresado a la temporada anterior (k = 10), ventaja de campo, descanso y bajas, curva logística.
+2. Clasificación: bug de la Copa NBA (Detroit 118-44 en vez de 59-22) y cómo se detectó.
+3. Modelo de predicción sencillo y explicable, en SQL: margen medio regresado a la temporada anterior (k = 10), ventaja de campo, descanso y bajas, curva logística.
    Backtest sin mirar al futuro, 4 temporadas × 1.230 partidos: 63,0 / 65,3 / 66,8 / 68,3 %. Referencias: "gana el local" ~56 %, "gana el de mejor balance" ~63 %.
-5. Pronósticos congelados 36 h antes de cada partido (tabla game_predictions): el balance de aciertos no se puede maquillar a posteriori.
-6. Sin LLM: Game Score para el MVP y noticias ya redactadas en castellano por ESPN Deportes en vez de traducir.
-7. ETL en GitHub Actions con tres ritmos (diario, cada 6 h, semanal) y upserts idempotentes.
+4. Pronósticos congelados 36 h antes de cada partido (tabla game_predictions): el balance de aciertos no se puede maquillar a posteriori.
+5. Noticias ya redactadas en castellano por ESPN Deportes en vez de traducir.
+6. ETL en GitHub Actions con tres ritmos (diario, cada 6 h, semanal) y upserts idempotentes.
 
 Qué haría distinto: tests automáticos; sacar el directo del cliente a un proxy; el ajuste por bajas no se puede validar sin histórico de lesiones.
 */}

@@ -1,35 +1,35 @@
 ---
 title: Metal Radar
-tagline: Conciertos de metal cerca de ti, tu diario de conciertos y gente con quien ir.
-summary: App móvil para descubrir conciertos y festivales de las bandas que sigues, llevar el diario de los que has visto y organizarte con otros fans. El backend corre sobre Supabase, con Postgres y seguridad por fila, autenticación, almacenamiento y 25 funciones serverless.
 order: 2
-accent: '#CF2E24'
-period: Junio – agosto de 2026
-role: 'Proyecto personal: diseño, app y backend'
-status: Preparando la publicación en Google Play
-stack:
-  - React Native · Expo
-  - TypeScript
-  - TanStack Query
-  - Supabase
-  - PostgreSQL
-  - Deno
-  - Leaflet
-  - i18next
-  - Sentry
-stats:
-  - value: '25'
-    label: funciones serverless en Deno
-  - value: '11'
-    label: servicios externos integrados
-  - value: '29'
-    label: pantallas
+icon: ../../../assets/projects/metal-radar/icon.png
+kicker: App móvil
+role: Diseño UI/UX y desarrollo completo
+description: Nació de perderme conciertos que tenía a veinte minutos de casa. Metal Radar sitúa en un mapa las bandas y conciertos cerca de ti, te recomienda grupos nuevos y te deja compartirlos con tu gente.
+features:
+  - icon: map-pin
+    title: Mapa por cercanía
+    text: Conciertos ordenados por distancia a ti.
+  - icon: sparkles
+    title: Recomendaciones
+    text: Bandas nuevas según lo que ya escuchas.
+  - icon: list-ordered
+    title: Setlists
+    text: Qué tocan en cada gira, canción a canción.
+  - icon: users
+    title: Social
+    text: Sigue a amigos y queda para ir juntos.
+note: 'Lo hice todo yo: investigación, flujos, interfaz y código. Es el proyecto donde más he aplicado lo aprendido en el máster de UI/UX.'
+screens:
+  layout: duo
+  items:
+    - label: Mapa de conciertos
+    - label: Ficha de banda
 ---
 
 {/*
-PENDIENTE DE REDACTAR (siguiente paso). Guion a partir del código:
+Notas sacadas del código para ampliar el proyecto más adelante (no se muestran en la web).
 
-Funcionalidades (irán en `features`, en el frontmatter):
+Funcionalidades:
 
 - Radar: recomendaciones "Para ti" con % de afinidad; al seguir una banda se sincronizan sus conciertos.
 - Mapa: conciertos y festivales por distancia real, agrupados por sala, radio configurable.
@@ -41,9 +41,9 @@ Funcionalidades (irán en `features`, en el frontmatter):
 - Importación de carteles de festival con IA (herramienta interna).
 - Cuenta: borrado total de datos, castellano / inglés, notificaciones push.
 
-Decisiones (irán aquí, con <Decision title="…">):
+Decisiones:
 
-1. Sin servidor propio: Supabase + Edge Functions. Las claves de terceros (Ticketmaster, Spotify, Anthropic…) nunca viajan en la app.
+1. Sin servidor propio: Supabase + 25 Edge Functions. Las claves de terceros (Ticketmaster, Spotify, Anthropic…) nunca viajan en la app.
 2. Recomendaciones explicables sin ML: artistas similares de Last.fm (6 puntos) y etiquetas compartidas (3), descartando etiquetas genéricas ("rock", "seen live"…) y con cupo por banda seguida para que haya variedad.
 3. La IA propone y una persona confirma: el cartel se lee con Claude, pero se revisa en una pantalla editable (bandas existentes / nuevas) antes de escribir nada.
 4. Seguridad en la base de datos, no solo en la interfaz: auditoría que encontró que un usuario podía hacerse admin (RLS es por fila, no por columna) → trigger. Mensajes privados: solo se puede editar read_at.

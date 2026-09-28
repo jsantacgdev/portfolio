@@ -1,29 +1,28 @@
 ---
 title: NBA Scores
-tagline: NBA scores, stats and predictions, in Spanish.
-summary: A mobile app to follow the NBA beyond the final score. It covers box scores, standings, each player's history, contracts and a win probability for every game. It is fed by a Python pipeline that brings several data sources together into a Postgres database.
 order: 1
-accent: '#E89154'
-period: Since May 2026
-role: 'Personal project: design, app, database and ETL'
-status: In active development
+icon: ../../../assets/projects/nba-scores/icon.png
+kicker: Mobile app
+role: Design, development and data
+description: The NBA in Spanish, no fluff. Live scores, standings, player profiles and head-to-head comparisons, in an app I open myself every morning.
 stack:
   - React Native · Expo
   - TypeScript
-  - TanStack Query
-  - Supabase
-  - PostgreSQL
-  - Python
-  - GitHub Actions
-stats:
-  - value: 66%
-    label: prediction accuracy across 4,920 games
-  - value: '< 1 min'
-    label: daily sync (down from 15)
-  - value: '60'
-    label: versioned SQL migrations
+  - Supabase · Postgres
+  - Python ETL
+decisions:
+  - lead: '15′ → <1′'
+    text: Daily sync rebuilt to go game by game instead of player by player.
+  - icon: table
+    text: 'Standings calculated on the fly with SQL views: always accurate, no cron jobs.'
+  - icon: award
+    text: "Each game's MVP from Hollinger's Game Score: reliable and zero-cost, no LLM needed."
+screens:
+  layout: trio
+  items:
+    - label: Scoreboard
+    - label: Live game
+    - label: Standings
 links:
   repo: https://github.com/jsantacgdev/nba-score
 ---
-
-{/* Se traducirá a partir de la versión en castellano cuando esté cerrada. */}
