@@ -7,85 +7,134 @@ export function isLocale(value: string | undefined): value is Locale {
 
 const es = {
   meta: {
-    homeTitle: 'Portfolio',
-    homeDescription:
-      'Aplicaciones construidas de principio a fin: interfaz, base de datos y los procesos que las mantienen al día.',
+    title: 'José Antonio Santacruz — Ingeniero full-stack y diseñador UI/UX',
+    description:
+      'Ingeniero full-stack y diseñador UI/UX. Diseño apps y también las programo: NBA Scores y Metal Radar.',
+  },
+  anchors: {
+    projects: 'proyectos',
+    about: 'sobre-mi',
+    contact: 'contacto',
   },
   nav: {
     label: 'Principal',
     projects: 'Proyectos',
+    about: 'Sobre mí',
+    cta: 'Hablemos',
     skip: 'Saltar al contenido',
   },
-  intro: {
-    kicker: 'Portfolio',
-    titleStart: 'Construyo aplicaciones',
-    titleEmphasis: 'de principio a fin.',
-    body: 'La interfaz, la base de datos y los procesos que la mantienen al día. Aquí tienes dos proyectos personales contados desde dentro: qué hacen y por qué están hechos así.',
+  hero: {
+    badge: 'Abierto a proyectos freelance y nuevas oportunidades',
+    title: 'Hola, soy José Antonio. Diseño apps y también las programo.',
+    body: 'Soy ingeniero full-stack y diseñador UI/UX. Entre semana construyo sistemas de trading y facturación de energía en NTT DATA; en mi tiempo libre hago apps sobre lo que me apasiona: el baloncesto y el metal.',
+    primary: 'Ver proyectos',
+    secondary: 'Escríbeme',
   },
   projects: {
-    anchor: 'proyectos',
     heading: 'Proyectos',
-    open: 'Ver el proyecto',
+    label: 'Proyecto',
+    decisions: 'Decisiones que me enorgullecen',
+    code: 'Ver código',
+    screenshot: 'Captura',
   },
-  project: {
-    back: 'Todos los proyectos',
-    period: 'Periodo',
-    role: 'Rol',
-    status: 'Estado',
-    links: 'Enlaces',
-    repo: 'Código en GitHub',
-    demo: 'Demo',
-    store: 'Descargar',
-    stack: 'Tecnologías',
-    screens: 'Pantallas',
-    features: 'Qué hace',
-    next: 'Siguiente proyecto',
+  stats: [
+    { value: '+4 años', label: 'como ingeniero full-stack en NTT DATA' },
+    { value: '2 apps', label: 'propias, del boceto a producción' },
+    { value: '9,5', label: 'en el TFM del máster en Diseño UI/UX' },
+  ],
+  about: {
+    kicker: 'Sobre mí',
+    title: 'Me gusta entender el problema entero, desde la base de datos hasta el último píxel.',
+    body: 'Trabajo con sistemas donde un dato mal calculado cuesta dinero: mercados eléctricos europeos, trading y facturación. Eso me ha hecho riguroso. El diseño me ha enseñado a pensar en quien usa lo que construyo. Intento que mis apps tengan las dos cosas.',
+    timelineHeading: 'Formación y experiencia',
+    timeline: [
+      {
+        title: 'Ingeniero full-stack',
+        meta: 'NTT DATA',
+        detail: 'Trading y facturación de energía para mercados europeos',
+      },
+      { title: 'Máster en Diseño y Desarrollo UI/UX', meta: 'TFM · 9,5', highlight: true },
+      { title: 'Máster universitario', meta: 'UNIR' },
+      { title: 'Ingeniería Informática', meta: 'UCLM' },
+    ] as TimelineItem[],
+  },
+  contact: {
+    title: '¿Tienes una idea o un puesto en mente? Cuéntamelo.',
+    body: 'Respondo en un par de días. También me vale que me hables de baloncesto o de tu último descubrimiento musical.',
   },
   footer: {
-    contact: 'Contacto',
+    credit: 'Diseñado y desarrollado por mí',
   },
 };
+
+interface TimelineItem {
+  title: string;
+  meta: string;
+  detail?: string;
+  highlight?: boolean;
+}
 
 type Dictionary = typeof es;
 
 const en: Dictionary = {
   meta: {
-    homeTitle: 'Portfolio',
-    homeDescription:
-      'Apps built end to end: the interface, the database and the pipelines that keep them up to date.',
+    title: 'José Antonio Santacruz — Full-stack engineer and UI/UX designer',
+    description:
+      'Full-stack engineer and UI/UX designer. I design apps and I build them too: NBA Scores and Metal Radar.',
+  },
+  anchors: {
+    projects: 'projects',
+    about: 'about',
+    contact: 'contact',
   },
   nav: {
     label: 'Main',
     projects: 'Projects',
+    about: 'About',
+    cta: "Let's talk",
     skip: 'Skip to content',
   },
-  intro: {
-    kicker: 'Portfolio',
-    titleStart: 'I build apps',
-    titleEmphasis: 'end to end.',
-    body: 'The interface, the database and the pipelines that keep it up to date. Here are two personal projects told from the inside: what they do and why they are built the way they are.',
+  hero: {
+    badge: 'Open to freelance projects and new opportunities',
+    title: "Hi, I'm José Antonio. I design apps, and I build them too.",
+    body: "I'm a full-stack engineer and UI/UX designer. On weekdays I build energy trading and billing systems at NTT DATA; in my free time I make apps about what I love: basketball and metal.",
+    primary: 'See projects',
+    secondary: 'Get in touch',
   },
   projects: {
-    anchor: 'projects',
     heading: 'Projects',
-    open: 'View project',
+    label: 'Project',
+    decisions: "Decisions I'm proud of",
+    code: 'View code',
+    screenshot: 'Screenshot',
   },
-  project: {
-    back: 'All projects',
-    period: 'Period',
-    role: 'Role',
-    status: 'Status',
-    links: 'Links',
-    repo: 'Code on GitHub',
-    demo: 'Demo',
-    store: 'Download',
-    stack: 'Tech stack',
-    screens: 'Screens',
-    features: 'What it does',
-    next: 'Next project',
+  stats: [
+    { value: '4+ years', label: 'as a full-stack engineer at NTT DATA' },
+    { value: '2 apps', label: 'of my own, from sketch to production' },
+    { value: '9.5', label: "on my UI/UX Design master's thesis" },
+  ],
+  about: {
+    kicker: 'About me',
+    title: 'I like understanding the whole problem, from the database to the last pixel.',
+    body: 'I work on systems where a miscalculated figure costs money: European electricity markets, trading and billing. That has made me rigorous. Design has taught me to think about the people who use what I build. I try to give my apps both.',
+    timelineHeading: 'Education and experience',
+    timeline: [
+      {
+        title: 'Full-stack engineer',
+        meta: 'NTT DATA',
+        detail: 'Energy trading and billing for European markets',
+      },
+      { title: "Master's in UI/UX Design and Development", meta: 'Thesis · 9.5', highlight: true },
+      { title: "Master's degree", meta: 'UNIR' },
+      { title: 'Computer Engineering', meta: 'UCLM' },
+    ],
+  },
+  contact: {
+    title: 'Got an idea or a role in mind? Tell me about it.',
+    body: 'I reply within a couple of days. Happy to talk basketball or hear about your latest music find, too.',
   },
   footer: {
-    contact: 'Contact',
+    credit: 'Designed and built by me',
   },
 };
 
