@@ -1,0 +1,63 @@
+---
+interface Props {
+  stats: { value: string; label: string }[];
+  compact?: boolean;
+}
+
+const { stats, compact = false } = Astro.props;
+---
+
+<dl class:list={['stats', { compact }]}>
+  {stats.map((stat) => (
+    <div>
+      <dt>{stat.label}</dt>
+      <dd>{stat.value}</dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: var(--space-l);
+  }
+
+  /* La etiqueta va antes en el HTML (dt → dd) pero se lee debajo de la cifra. */
+  .stats div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: var(--space-2xs);
+    padding-top: var(--space-s);
+    border-top: 2px solid var(--accent);
+  }
+
+  /* Cifras en la sans: en la serif, "11" se lee como "ll". */
+  dd {
+    font-size: var(--step-3);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
+  dt {
+    font-size: var(--step--1);
+    color: var(--ink-2);
+    max-width: 22ch;
+  }
+
+  .compact {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+    gap: var(--space-m);
+  }
+
+  .compact div {
+    border-top-width: 1px;
+  }
+
+  .compact dd {
+    font-size: var(--step-2);
+  }
+</style>
