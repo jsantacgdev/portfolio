@@ -1,0 +1,82 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { SITE } from '../../config';
+import { LOCALES, useTranslations, type Locale } from '../../i18n';
+import { getProjectsByLocale } from '../../lib/projects';
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const projects = (await getProjectsByLocale())[lang];
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${SITE.name} — ${t.meta.homeTitle}`}
+  description={t.meta.homeDescription}
+  path="/"
+>
+  <section class="intro wrap">
+    <p class="kicker">{t.intro.kicker}</p>
+    <h1>
+      {t.intro.titleStart} <em>{t.intro.titleEmphasis}</em>
+    </h1>
+    <p class="lede">{t.intro.body}</p>
+  </section>
+
+  <section id={t.projects.anchor} class="projects wrap" aria-labelledby="projects-heading">
+    <h2 id="projects-heading" class="kicker">
+      {t.projects.heading}
+    </h2>
+    <ol role="list" class="project-list">
+      {projects.map((project, index) => (
+        <li>
+          <ProjectCard project={project} index={index} lang={lang} />
+        </li>
+      ))}
+    </ol>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro {
+    padding-block: var(--space-2xl) var(--space-3xl);
+  }
+
+  h1 {
+    max-width: 14ch;
+    margin-top: var(--space-m);
+    font-size: clamp(3rem, 1.9rem + 5.5vw, 7rem);
+    line-height: 0.95;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--ink-2);
+  }
+
+  .lede {
+    max-width: 34rem;
+    margin-top: var(--space-xl);
+    font-size: var(--step-1);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  .projects {
+    scroll-margin-top: var(--space-l);
+  }
+
+  .project-list {
+    margin-top: var(--space-m);
+    border-bottom: 1px solid var(--line-strong);
+  }
+</style>

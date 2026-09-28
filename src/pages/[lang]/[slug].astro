@@ -1,0 +1,250 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Decision from '../../components/Decision.astro';
+import FeatureList from '../../components/FeatureList.astro';
+import Gallery from '../../components/Gallery.astro';
+import StatList from '../../components/StatList.astro';
+import TagList from '../../components/TagList.astro';
+import { SITE } from '../../config';
+import { LOCALES, localizedPath, useTranslations, type Locale } from '../../i18n';
+import { getProjectsByLocale, projectSlug, type Project } from '../../lib/projects';
+
+export async function getStaticPaths() {
+  const byLocale = await getProjectsByLocale();
+  return LOCALES.flatMap((lang) => {
+    const list = byLocale[lang];
+    return list.map((project, index) => ({
+      params: { lang, slug: projectSlug(project) },
+      props: {
+        lang,
+        project,
+        index,
+        next: list.length > 1 ? list[(index + 1) % list.length] : undefined,
+      },
+    }));
+  });
+}
+
+interface Props {
+  lang: Locale;
+  project: Project;
+  index: number;
+  next: Project | undefined;
+}
+
+const { lang, project, index, next } = Astro.props;
+const { Content } = await render(project);
+const t = useTranslations(lang);
+const data = project.data;
+const home = localizedPath(lang);
+
+const links = [
+  data.links.repo && { href: data.links.repo, label: t.project.repo },
+  data.links.demo && { href: data.links.demo, label: t.project.demo },
+  data.links.store && { href: data.links.store, label: t.project.store },
+].filter((link): link is { href: string; label: string } => Boolean(link));
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${data.title} — ${SITE.name}`}
+  description={data.summary}
+  path={`/${projectSlug(project)}/`}
+>
+  <article style={`--accent: ${data.accent}`}>
+    <header class="hero wrap">
+      <a class="back" href={`${home}#${t.projects.anchor}`}>
+        ← {t.project.back}
+      </a>
+      <p class="kicker index">{String(index + 1).padStart(2, '0')}</p>
+      <h1>{data.title}</h1>
+      <p class="tagline">{data.tagline}</p>
+      <p class="summary">{data.summary}</p>
+
+      <dl class="meta">
+        <div>
+          <dt>{t.project.role}</dt>
+          <dd>{data.role}</dd>
+        </div>
+        <div>
+          <dt>{t.project.period}</dt>
+          <dd>{data.period}</dd>
+        </div>
+        <div>
+          <dt>{t.project.status}</dt>
+          <dd>{data.status}</dd>
+        </div>
+        {links.length > 0 && (
+          <div>
+            <dt>{t.project.links}</dt>
+            <dd>
+              <ul role="list">
+                {links.map((link) => (
+                  <li>
+                    <a href={link.href}>{link.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        )}
+      </dl>
+    </header>
+
+    <div class="wrap sections">
+      {data.stats.length > 0 && <StatList stats={data.stats} />}
+
+      <section aria-labelledby="stack-heading">
+        <h2 id="stack-heading" class="kicker">
+          {t.project.stack}
+        </h2>
+        <div class="stack">
+          <TagList items={data.stack} />
+        </div>
+      </section>
+
+      {data.screenshots.length > 0 && (
+        <Gallery heading={t.project.screens} shots={data.screenshots} />
+      )}
+
+      {data.features.length > 0 && (
+        <FeatureList heading={t.project.features} features={data.features} />
+      )}
+
+      <div class="prose">
+        <Content components={{ Decision }} />
+      </div>
+    </div>
+
+    {next && (
+      <nav class="wrap" aria-label={t.project.next}>
+        <div class="next">
+          <p class="kicker">{t.project.next}</p>
+          <a
+            href={localizedPath(lang, `/${projectSlug(next)}/`)}
+            style={`--accent: ${next.data.accent}`}
+          >
+            {next.data.title} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </nav>
+    )}
+  </article>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-l) var(--space-2xl);
+  }
+
+  .back {
+    font-size: var(--step--1);
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+
+  .back:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+
+  .index {
+    margin-top: var(--space-2xl);
+  }
+
+  .index::after {
+    content: '';
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    margin-left: 0.5em;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  h1 {
+    margin-top: var(--space-s);
+    font-size: clamp(3rem, 1.6rem + 7vw, 8rem);
+    line-height: 0.92;
+  }
+
+  .tagline {
+    max-width: 36rem;
+    margin-top: var(--space-l);
+    font-size: var(--step-2);
+    font-family: var(--font-display);
+    line-height: 1.2;
+  }
+
+  .summary {
+    max-width: var(--measure);
+    margin-top: var(--space-l);
+    color: var(--ink-2);
+  }
+
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: var(--space-l);
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-l);
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .meta dt {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  .meta dd {
+    margin-top: var(--space-2xs);
+  }
+
+  .sections {
+    display: grid;
+    gap: var(--space-2xl);
+  }
+
+  .stack {
+    margin-top: var(--space-s);
+  }
+
+  .prose:empty {
+    display: none;
+  }
+
+  .next {
+    margin-top: var(--space-3xl);
+    padding-top: var(--space-l);
+    border-top: 1px solid var(--line-strong);
+  }
+
+  .next a {
+    display: inline-block;
+    margin-top: var(--space-xs);
+    font-family: var(--font-display);
+    font-size: var(--step-4);
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .next a span {
+    display: inline-block;
+    color: var(--accent);
+    transition: transform 0.2s ease;
+  }
+
+  .next a:hover span {
+    transform: translateX(0.15em);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .next a span {
+      transition: none;
+    }
+  }
+</style>
