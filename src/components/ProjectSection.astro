@@ -1,0 +1,238 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import Screens from './Screens.astro';
+import { useTranslations, type Locale } from '../i18n';
+import { projectSlug, type Project } from '../lib/projects';
+
+interface Props {
+  project: Project;
+  index: number;
+  lang: Locale;
+}
+
+const { project, index, lang } = Astro.props;
+const data = project.data;
+const t = useTranslations(lang);
+const titleId = `${projectSlug(project)}-title`;
+const number = String(index + 1).padStart(2, '0');
+---
+
+<article class="project" aria-labelledby={titleId}>
+  <div class="wrap">
+    <header class="head">
+      <Image src={data.icon} alt="" width={80} height={80} densities={[1, 2]} class="app-icon" />
+      <div>
+        <p class="kicker">
+          {t.projects.label} {number} · {data.kicker}
+        </p>
+        <p class="role">{data.role}</p>
+      </div>
+    </header>
+
+    <h3 id={titleId} class="title">
+      {data.title}
+    </h3>
+    <p class="description">{data.description}</p>
+
+    {data.stack.length > 0 && (
+      <ul role="list" class="tags">
+        {data.stack.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    )}
+
+    {data.decisions.length > 0 && (
+      <section class="decisions" aria-labelledby={`${titleId}-decisions`}>
+        <h4 id={`${titleId}-decisions`} class="label">
+          {t.projects.decisions}
+        </h4>
+        <ul role="list">
+          {data.decisions.map((decision) => (
+            <li>
+              {decision.lead ? (
+                <span class="lead">{decision.lead}</span>
+              ) : (
+                decision.icon && <Icon name={decision.icon} size={28} class="decision-icon" />
+              )}
+              <p>{decision.text}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {data.features.length > 0 && (
+      <ul role="list" class="features">
+        {data.features.map((feature) => (
+          <li>
+            <Icon name={feature.icon} size={26} class="feature-icon" />
+            <h4>{feature.title}</h4>
+            <p>{feature.text}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {data.note && <p class="note">{data.note}</p>}
+
+    {data.links.repo && (
+      <a class="code-link" href={data.links.repo}>
+        <Icon name="github" size={20} />
+        {t.projects.code}
+      </a>
+    )}
+
+    <div class="screens">
+      <Screens lang={lang} layout={data.screens.layout} items={data.screens.items} />
+    </div>
+  </div>
+</article>
+
+<style>
+  .project + :global(.project) {
+    margin-top: clamp(6rem, 4rem + 8vw, 14rem);
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .head :global(.app-icon) {
+    width: clamp(3.5rem, 3rem + 1.5vw, 5rem);
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: 22%;
+  }
+
+  .role {
+    margin-top: 0.3rem;
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.2rem);
+    color: var(--text-2);
+  }
+
+  .title {
+    margin-top: 2rem;
+    font-size: clamp(2.1rem, 1.6rem + 1.8vw, 3rem);
+  }
+
+  .description {
+    max-width: 72ch;
+    margin-top: 1.5rem;
+    font-size: clamp(1.1rem, 1rem + 0.4vw, 1.375rem);
+    line-height: 1.75;
+    color: var(--text-2);
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 2rem;
+  }
+
+  .tags li {
+    padding: 0.3rem 0.85rem;
+    font-size: 1rem;
+    color: var(--text);
+    background: var(--tag);
+    border-radius: 6px;
+  }
+
+  .decisions {
+    margin-top: 3.25rem;
+  }
+
+  .decisions ul {
+    display: grid;
+    gap: 2.25rem;
+    margin-top: 1.75rem;
+  }
+
+  .decisions li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.6rem;
+  }
+
+  .decisions p {
+    flex: 1 1 28ch;
+    font-size: clamp(1.05rem, 1rem + 0.25vw, 1.2rem);
+    color: var(--text-2);
+  }
+
+  .lead {
+    font-size: clamp(1.6rem, 1.4rem + 0.6vw, 1.9rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    color: var(--accent);
+  }
+
+  .decisions :global(.decision-icon),
+  .features :global(.feature-icon) {
+    flex: none;
+    color: var(--accent);
+  }
+
+  .features {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 2.25rem;
+  }
+
+  @media (min-width: 48rem) {
+    .features {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .features li {
+    padding: 1.4rem 1.5rem;
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 0.75rem;
+  }
+
+  .features h4 {
+    margin-top: 0.9rem;
+    font-size: 1.3rem;
+    letter-spacing: -0.01em;
+  }
+
+  .features p {
+    margin-top: 0.4rem;
+    font-size: 1.05rem;
+    color: var(--muted);
+  }
+
+  .note {
+    max-width: 80ch;
+    margin-top: 2.25rem;
+    font-size: clamp(1.05rem, 1rem + 0.2vw, 1.2rem);
+    line-height: 1.75;
+    color: var(--muted);
+  }
+
+  .code-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 3rem;
+    font-size: 1.2rem;
+    color: var(--accent);
+  }
+
+  .code-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .screens {
+    margin-top: clamp(3rem, 2rem + 4vw, 6rem);
+  }
+</style>
