@@ -2,23 +2,54 @@
 title: Metal Radar
 order: 2
 icon: ../../../assets/projects/metal-radar/icon.png
-kicker: App móvil
-role: Diseño UI/UX y desarrollo completo
-description: Nació de perderme conciertos que tenía a veinte minutos de casa. Metal Radar sitúa en un mapa las bandas y conciertos cerca de ti, te recomienda grupos nuevos y te deja compartirlos con tu gente.
+kicker: Aplicación móvil
+role: Diseño UI/UX y desarrollo integral
+description: |
+  Aplicación móvil para aficionados a la música metal que centraliza el descubrimiento de conciertos y festivales, el registro de los conciertos a los que asiste el usuario y la relación con otros aficionados. Surge de una necesidad concreta: la dificultad de conocer a tiempo los conciertos que se celebran cerca del propio domicilio.
+
+  El backend se apoya en Supabase, con PostgreSQL y seguridad a nivel de fila, autenticación y almacenamiento de archivos, y en 25 funciones serverless en Deno que integran servicios externos como Ticketmaster, Spotify, Setlist.fm, Last.fm y MusicBrainz. La aplicación está disponible en castellano e inglés y se encuentra en preparación para su publicación en Google Play.
+stack:
+  - React Native · Expo
+  - TypeScript
+  - TanStack Query
+  - Supabase · PostgreSQL
+  - Deno
+  - Sentry
 features:
   - icon: map-pin
     title: Mapa por cercanía
-    text: Conciertos ordenados por distancia a ti.
+    text: 'Conciertos y festivales ordenados por distancia real al usuario, agrupados por recinto y con un radio de búsqueda configurable.'
+  - icon: bell
+    title: Seguimiento de bandas
+    text: 'Al seguir una banda se sincronizan automáticamente sus próximos conciertos, con avisos de nuevas fechas cercanas y un recordatorio la víspera de cada concierto al que se va a asistir.'
   - icon: sparkles
     title: Recomendaciones
-    text: Bandas nuevas según lo que ya escuchas.
+    text: 'Sugerencia de bandas nuevas a partir de las que el usuario ya sigue, con un porcentaje de afinidad para cada una.'
+  - icon: notebook
+    title: Diario de conciertos
+    text: 'Registro de cada concierto con su estado (interesado, asistiré o asistido), valoración, notas, fotografías y enlace al calendario del dispositivo.'
   - icon: list-ordered
     title: Setlists
-    text: Qué tocan en cada gira, canción a canción.
+    text: 'Repertorio real de cada concierto o, si aún no se ha celebrado, una previsión basada en la gira en curso, exportable como lista de reproducción de Spotify.'
+  - icon: chart
+    title: Estadísticas y resumen anual
+    text: 'Estadísticas de asistencia (conciertos, bandas, ciudades y kilómetros recorridos) y un resumen anual en formato de cartel de festival, listo para compartir.'
   - icon: users
-    title: Social
-    text: Sigue a amigos y queda para ir juntos.
-note: 'Lo hice todo yo: investigación, flujos, interfaz y código. Es el proyecto donde más he aplicado lo aprendido en el máster de UI/UX.'
+    title: Comunidad
+    text: 'Perfiles públicos o privados, seguimiento entre usuarios, actividad, comentarios, asistentes a cada concierto y mensajería privada.'
+  - icon: shield
+    title: Moderación y privacidad
+    text: 'Denuncias de contenido y de usuarios, bloqueos, panel de moderación y eliminación completa de la cuenta y de sus datos.'
+decisions:
+  - icon: key
+    text: 'Todas las operaciones que requieren credenciales de terceros se ejecutan en funciones serverless, de modo que la aplicación nunca expone claves privadas.'
+  - icon: shield
+    text: 'Seguridad aplicada en la propia base de datos mediante políticas RLS y triggers. Una auditoría interna previa a la publicación detectó y corrigió una posible escalada de privilegios.'
+  - icon: sparkles
+    text: 'Motor de recomendaciones propio y explicable, basado en artistas similares y etiquetas de Last.fm, que descarta las etiquetas genéricas y limita el peso de cada banda para garantizar la variedad.'
+  - icon: scan
+    text: 'Importación de carteles de festival asistida por IA: el modelo extrae el cartel completo y una pantalla de revisión permite validar los datos antes de guardarlos.'
+note: 'Proyecto desarrollado íntegramente por mí: investigación, definición de flujos, diseño de interfaz e implementación. Es el proyecto en el que he aplicado de forma más directa los conocimientos adquiridos en el Máster en Diseño y Desarrollo UI/UX.'
 screens:
   layout: duo
   items:
@@ -27,29 +58,11 @@ screens:
 ---
 
 {/*
-Notas sacadas del código para ampliar el proyecto más adelante (no se muestran en la web).
+Notas sacadas del código que aún no aparecen en la web.
 
-Funcionalidades:
-
-- Radar: recomendaciones "Para ti" con % de afinidad; al seguir una banda se sincronizan sus conciertos.
-- Mapa: conciertos y festivales por distancia real, agrupados por sala, radio configurable.
-- Diario: interesado / voy / asistí, valoración, notas, fotos, añadir al calendario.
-- Setlists: el real (Setlist.fm) o una predicción si el concierto es futuro; exportar a Spotify.
-- Estadísticas y "Wrapped" anual con póster tipo cartel de festival.
-- Social: seguidores y cuentas privadas, feed, quién va, comentarios con hilos, "tengo hueco en el coche", mensajes privados.
-- Moderación: reportes, bloqueos, panel de moderación, suspensiones.
-- Importación de carteles de festival con IA (herramienta interna).
-- Cuenta: borrado total de datos, castellano / inglés, notificaciones push.
-
-Decisiones:
-
-1. Sin servidor propio: Supabase + 25 Edge Functions. Las claves de terceros (Ticketmaster, Spotify, Anthropic…) nunca viajan en la app.
-2. Recomendaciones explicables sin ML: artistas similares de Last.fm (6 puntos) y etiquetas compartidas (3), descartando etiquetas genéricas ("rock", "seen live"…) y con cupo por banda seguida para que haya variedad.
-3. La IA propone y una persona confirma: el cartel se lee con Claude, pero se revisa en una pantalla editable (bandas existentes / nuevas) antes de escribir nada.
-4. Seguridad en la base de datos, no solo en la interfaz: auditoría que encontró que un usuario podía hacerse admin (RLS es por fila, no por columna) → trigger. Mensajes privados: solo se puede editar read_at.
-5. Mensajes por sondeo (5 s en el chat, 15 s en la lista) en vez de tiempo real: suficiente para un chat entre conocidos y sin conexiones abiertas que gestionar.
-6. Cron sin solaparse: bloqueo por fila en vez de advisory locks, que no son fiables con PgBouncer en modo transacción. Reintento real de los push fallidos.
-7. Privacidad: Sentry sin datos personales, borrado de cuenta completo, política de privacidad y términos publicados.
+- Mensajes por sondeo (5 s en el chat, 15 s en la lista) en vez de tiempo real: suficiente para un chat entre conocidos y sin conexiones abiertas que gestionar.
+- Cron sin solaparse: bloqueo por fila en vez de advisory locks, que no son fiables con PgBouncer en modo transacción. Reintento real de los push fallidos.
+- Sentry sin datos personales; política de privacidad y términos publicados.
 
 Qué haría distinto: tests automáticos; migraciones versionadas en vez de scripts SQL aplicados a mano (en NBA Scores ya lo hice así).
 */}

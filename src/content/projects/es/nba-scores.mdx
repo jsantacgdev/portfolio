@@ -2,21 +2,49 @@
 title: NBA Scores
 order: 1
 icon: ../../../assets/projects/nba-scores/icon.png
-kicker: App móvil
-role: Diseño, desarrollo y datos
-description: La NBA en castellano, sin rodeos. Marcadores en directo, clasificaciones, fichas de jugadores y comparativas cara a cara, en una app que abro yo mismo cada mañana.
+kicker: Aplicación móvil
+role: Diseño, desarrollo e ingeniería de datos
+description: |
+  Aplicación móvil para el seguimiento de la NBA en castellano. Reúne en un solo lugar los resultados y marcadores en directo, las estadísticas completas de cada partido, las clasificaciones, las fichas de jugadores y equipos, y una estimación propia de la probabilidad de victoria de cada encuentro.
+
+  Los datos proceden de fuentes públicas, entre ellas las estadísticas oficiales de la NBA y ESPN. Un proceso ETL desarrollado en Python los normaliza y los carga en una base de datos PostgreSQL alojada en Supabase. La actualización está automatizada con GitHub Actions: diaria para partidos y predicciones, cada seis horas para noticias y lesiones, y semanal para equipos y plantillas.
 stack:
   - React Native · Expo
   - TypeScript
-  - Supabase · Postgres
-  - Python ETL
+  - TanStack Query
+  - Supabase · PostgreSQL
+  - Python
+  - GitHub Actions
+features:
+  - icon: calendar
+    title: Partidos y resultados
+    text: 'Calendario diario, marcadores en directo, estadísticas completas de cada partido, quintetos iniciales y jugador más valorado del encuentro.'
+  - icon: percent
+    title: Probabilidad de victoria
+    text: 'Estimación previa para cada partido, con el desglose de los factores que la determinan: nivel de los equipos, ventaja de campo, descanso y bajas.'
+  - icon: trophy
+    title: Clasificaciones y playoffs
+    text: 'Clasificación por conferencias con las posiciones de playoff y play-in, rachas, balance como local y visitante, cuadro de eliminatorias e histórico de temporadas.'
+  - icon: user
+    title: Jugadores
+    text: 'Promedios por temporada, registro partido a partido, trayectoria, premios, récords personales y comparador entre dos jugadores.'
+  - icon: shirt
+    title: Equipos y mercado
+    text: 'Plantillas, palmarés, situación salarial y contratos, traspasos, lesiones y resultados del draft.'
+  - icon: bell
+    title: Noticias y seguimiento
+    text: 'Noticias en castellano, equipos favoritos con notificaciones y búsqueda global de equipos y jugadores.'
 decisions:
-  - lead: '15′ → <1′'
-    text: Sincronización diaria rehecha partido a partido en lugar de jugador a jugador.
+  - lead: '15 min → <1 min'
+    text: 'Rediseño del proceso de sincronización diaria, que pasó de consultar los datos jugador a jugador a hacerlo partido a partido.'
+  - lead: '66 %'
+    text: 'Acierto medio del modelo de probabilidad de victoria, implementado en SQL y validado mediante un backtest sobre 4.920 partidos de cuatro temporadas, frente al 56 % de la referencia «gana siempre el local». Las predicciones se registran antes de cada partido para medir su acierto real.'
   - icon: table
-    text: 'Clasificaciones calculadas al vuelo con vistas SQL: siempre exactas, sin cron jobs.'
+    text: 'Clasificaciones calculadas en el momento de la consulta mediante vistas y funciones SQL, lo que garantiza su exactitud sin procesos programados de recálculo.'
+  - icon: database
+    text: 'Arquitectura desacoplada: la aplicación consulta su propia base de datos, con la única excepción de los marcadores en directo, y el ETL es el único componente que se conecta a fuentes externas.'
   - icon: award
-    text: 'MVP de cada partido con el Game Score de Hollinger: fiable y a coste cero, sin recurrir a un LLM.'
+    text: 'Jugador más valorado de cada partido calculado con el Game Score de John Hollinger, un método determinista y sin coste que no depende de modelos de lenguaje.'
 screens:
   layout: trio
   items:
@@ -28,26 +56,13 @@ links:
 ---
 
 {/*
-Notas sacadas del código para ampliar el proyecto más adelante (no se muestran en la web).
+Notas sacadas del código que aún no aparecen en la web.
 
-Funcionalidades:
-
-- Partidos: calendario por días, marcador en directo, box score, quintetos, MVP (Game Score de Hollinger), enfrentamientos directos y forma.
-- Probabilidad de victoria por partido con desglose de factores (nivel, campo, descanso, bajas) y balance público de aciertos.
-- Clasificación por conferencia con líneas de playoff/play-in, splits y racha; cuadro de playoffs; temporadas históricas con campeón.
-- Jugadores: medias, game log, récords, carrera, premios, contrato e historial salarial; comparador cara a cara.
-- Equipos: plantilla, palmarés, situación salarial, lesionados. Draft con Rookie del Año.
-- Novedades: noticias de ESPN Deportes, lesiones y traspasos. Favoritos, notificaciones y búsqueda global.
-
-Otras decisiones:
-
-1. La app solo habla con mi base de datos; el ETL en Python es lo único que toca fuentes externas. Excepción consciente: el directo.
-2. Clasificación: bug de la Copa NBA (Detroit 118-44 en vez de 59-22) y cómo se detectó.
-3. Modelo de predicción sencillo y explicable, en SQL: margen medio regresado a la temporada anterior (k = 10), ventaja de campo, descanso y bajas, curva logística.
-   Backtest sin mirar al futuro, 4 temporadas × 1.230 partidos: 63,0 / 65,3 / 66,8 / 68,3 %. Referencias: "gana el local" ~56 %, "gana el de mejor balance" ~63 %.
-4. Pronósticos congelados 36 h antes de cada partido (tabla game_predictions): el balance de aciertos no se puede maquillar a posteriori.
-5. Noticias ya redactadas en castellano por ESPN Deportes en vez de traducir.
-6. ETL en GitHub Actions con tres ritmos (diario, cada 6 h, semanal) y upserts idempotentes.
+- Clasificación: bug de la Copa NBA (Detroit 118-44 en vez de 59-22) y cómo se detectó.
+- Modelo: margen medio regresado a la temporada anterior (k = 10), ventaja de campo, descanso y bajas, curva logística.
+  Backtest por temporada: 63,0 / 65,3 / 66,8 / 68,3 %. Referencia «gana el de mejor balance»: ~63 %.
+- Pronósticos congelados 36 h antes de cada partido (tabla game_predictions).
+- Noticias ya redactadas en castellano por ESPN Deportes en vez de traducir.
 
 Qué haría distinto: tests automáticos; sacar el directo del cliente a un proxy; el ajuste por bajas no se puede validar sin histórico de lesiones.
 */}

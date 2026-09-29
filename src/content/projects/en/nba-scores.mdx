@@ -3,20 +3,48 @@ title: NBA Scores
 order: 1
 icon: ../../../assets/projects/nba-scores/icon.png
 kicker: Mobile app
-role: Design, development and data
-description: The NBA in Spanish, no fluff. Live scores, standings, player profiles and head-to-head comparisons, in an app I open myself every morning.
+role: Design, development and data engineering
+description: |
+  A mobile app for following the NBA in Spanish. It brings together live scores, full box scores, standings, player and team profiles, and an in-house estimate of the win probability of every game.
+
+  Data comes from public sources, including the NBA's official statistics and ESPN. A Python ETL pipeline normalises it and loads it into a PostgreSQL database hosted on Supabase. Updates are automated with GitHub Actions: daily for games and predictions, every six hours for news and injuries, and weekly for teams and rosters.
 stack:
   - React Native · Expo
   - TypeScript
-  - Supabase · Postgres
-  - Python ETL
+  - TanStack Query
+  - Supabase · PostgreSQL
+  - Python
+  - GitHub Actions
+features:
+  - icon: calendar
+    title: Games and results
+    text: "Daily schedule, live scores, full box scores, starting line-ups and each game's top performer."
+  - icon: percent
+    title: Win probability
+    text: 'Pre-game estimate for every matchup, broken down into the factors behind it: team strength, home advantage, rest and injuries.'
+  - icon: trophy
+    title: Standings and playoffs
+    text: 'Conference standings with playoff and play-in positions, streaks, home and away records, the playoff bracket and past seasons.'
+  - icon: user
+    title: Players
+    text: 'Season averages, game logs, career history, awards, personal records and a head-to-head comparison tool.'
+  - icon: shirt
+    title: Teams and market
+    text: 'Rosters, honours, payroll and contracts, trades, injuries and draft results.'
+  - icon: bell
+    title: News and alerts
+    text: 'News in Spanish, favourite teams with notifications and global search across teams and players.'
 decisions:
-  - lead: '15′ → <1′'
-    text: Daily sync rebuilt to go game by game instead of player by player.
+  - lead: '15 min → <1 min'
+    text: 'Redesign of the daily sync, which moved from fetching data player by player to fetching it game by game.'
+  - lead: '66%'
+    text: 'Average accuracy of the win probability model, implemented in SQL and validated through a backtest on 4,920 games over four seasons, compared with 56% for the "home team always wins" baseline. Predictions are recorded before each game to measure real-world accuracy.'
   - icon: table
-    text: 'Standings calculated on the fly with SQL views: always accurate, no cron jobs.'
+    text: 'Standings computed at query time through SQL views and functions, which keeps them accurate without scheduled recalculation jobs.'
+  - icon: database
+    text: 'Decoupled architecture: the app reads from its own database, with live scores as the only exception, and the ETL is the only component that connects to external sources.'
   - icon: award
-    text: "Each game's MVP from Hollinger's Game Score: reliable and zero-cost, no LLM needed."
+    text: "Each game's top performer calculated with John Hollinger's Game Score, a deterministic, zero-cost method that does not rely on language models."
 screens:
   layout: trio
   items:

@@ -3,22 +3,53 @@ title: Metal Radar
 order: 2
 icon: ../../../assets/projects/metal-radar/icon.png
 kicker: Mobile app
-role: UI/UX design and full development
-description: It started with me missing gigs that were twenty minutes from home. Metal Radar puts nearby bands and gigs on a map, recommends new bands and lets you share them with your people.
+role: UI/UX design and end-to-end development
+description: |
+  A mobile app for metal fans that brings together gig and festival discovery, a record of the concerts the user attends and a community of fellow fans. It grew out of a specific need: the difficulty of finding out in time about concerts taking place close to home.
+
+  The backend is built on Supabase, using PostgreSQL with row-level security, authentication and file storage, together with 25 serverless functions on Deno that integrate external services such as Ticketmaster, Spotify, Setlist.fm, Last.fm and MusicBrainz. The app is available in Spanish and English and is being prepared for release on Google Play.
+stack:
+  - React Native · Expo
+  - TypeScript
+  - TanStack Query
+  - Supabase · PostgreSQL
+  - Deno
+  - Sentry
 features:
   - icon: map-pin
     title: Nearby map
-    text: Gigs sorted by how far they are from you.
+    text: 'Gigs and festivals sorted by actual distance from the user, grouped by venue, with a configurable search radius.'
+  - icon: bell
+    title: Band tracking
+    text: 'Following a band automatically syncs its upcoming gigs, with alerts for new dates nearby and a reminder the day before each concert the user is attending.'
   - icon: sparkles
     title: Recommendations
-    text: New bands based on what you already listen to.
+    text: 'Suggestions of new bands based on the ones the user already follows, each with an affinity score.'
+  - icon: notebook
+    title: Concert diary
+    text: 'A record of each concert with its status (interested, going or attended), rating, notes, photos and a link to the device calendar.'
   - icon: list-ordered
     title: Setlists
-    text: What they play on each tour, song by song.
+    text: 'The actual setlist of each concert or, for upcoming ones, a forecast based on the current tour, exportable as a Spotify playlist.'
+  - icon: chart
+    title: Stats and yearly recap
+    text: 'Attendance statistics (concerts, bands, cities and kilometres travelled) and a yearly recap styled as a festival poster, ready to share.'
   - icon: users
-    title: Social
-    text: Follow friends and plan to go together.
-note: "I did it all myself: research, flows, interface and code. It's the project where I've applied the most from my UI/UX master's."
+    title: Community
+    text: 'Public or private profiles, user following, activity feed, comments, attendee lists for each concert and private messaging.'
+  - icon: shield
+    title: Moderation and privacy
+    text: 'Reporting of content and users, blocking, a moderation panel and full deletion of the account and its data.'
+decisions:
+  - icon: key
+    text: 'All operations that require third-party credentials run in serverless functions, so the app never exposes private keys.'
+  - icon: shield
+    text: 'Security enforced in the database itself through RLS policies and triggers. An internal audit before release detected and fixed a potential privilege escalation.'
+  - icon: sparkles
+    text: 'In-house, explainable recommendation engine based on similar artists and Last.fm tags, which discards generic tags and caps the weight of each band to ensure variety.'
+  - icon: scan
+    text: 'AI-assisted import of festival posters: the model extracts the full line-up and a review screen lets an administrator validate the data before it is saved.'
+note: "Developed entirely by me: research, user flows, interface design and implementation. It is the project in which I have most directly applied what I learned in the Master's in UI/UX Design and Development."
 screens:
   layout: duo
   items:
