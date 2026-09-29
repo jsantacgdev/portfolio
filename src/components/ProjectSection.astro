@@ -16,6 +16,10 @@ const data = project.data;
 const t = useTranslations(lang);
 const titleId = `${projectSlug(project)}-title`;
 const number = String(index + 1).padStart(2, '0');
+// Una línea en blanco en el MDX separa párrafos de la descripción.
+const paragraphs = data.description.split(/\n\s*\n/).map((p) => p.trim());
+// Si alguna decisión lleva cifra destacada, todas reservan su ancho para que los textos alineen.
+const hasLeads = data.decisions.some((decision) => decision.lead);
 ---
 
 <article class="project" aria-labelledby={titleId}>
@@ -33,7 +37,11 @@ const number = String(index + 1).padStart(2, '0');
     <h3 id={titleId} class="title">
       {data.title}
     </h3>
-    <p class="description">{data.description}</p>
+    <div class="description">
+      {paragraphs.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
 
     {data.stack.length > 0 && (
       <ul role="list" class="tags">
@@ -43,12 +51,29 @@ const number = String(index + 1).padStart(2, '0');
       </ul>
     )}
 
+    {data.features.length > 0 && (
+      <section class="features" aria-labelledby={`${titleId}-features`}>
+        <h4 id={`${titleId}-features`} class="label">
+          {t.projects.features}
+        </h4>
+        <ul role="list">
+          {data.features.map((feature) => (
+            <li>
+              <Icon name={feature.icon} size={26} class="feature-icon" />
+              <h5>{feature.title}</h5>
+              <p>{feature.text}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
     {data.decisions.length > 0 && (
       <section class="decisions" aria-labelledby={`${titleId}-decisions`}>
         <h4 id={`${titleId}-decisions`} class="label">
           {t.projects.decisions}
         </h4>
-        <ul role="list">
+        <ul role="list" class:list={{ 'has-leads': hasLeads }}>
           {data.decisions.map((decision) => (
             <li>
               {decision.lead ? (
@@ -61,18 +86,6 @@ const number = String(index + 1).padStart(2, '0');
           ))}
         </ul>
       </section>
-    )}
-
-    {data.features.length > 0 && (
-      <ul role="list" class="features">
-        {data.features.map((feature) => (
-          <li>
-            <Icon name={feature.icon} size={26} class="feature-icon" />
-            <h4>{feature.title}</h4>
-            <p>{feature.text}</p>
-          </li>
-        ))}
-      </ul>
     )}
 
     {data.note && <p class="note">{data.note}</p>}
@@ -127,6 +140,10 @@ const number = String(index + 1).padStart(2, '0');
     color: var(--text-2);
   }
 
+  .description p + p {
+    margin-top: 1.1rem;
+  }
+
   .tags {
     display: flex;
     flex-wrap: wrap;
@@ -153,14 +170,25 @@ const number = String(index + 1).padStart(2, '0');
   }
 
   .decisions li {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: 0.5rem 1.6rem;
   }
 
-  .decisions p {
-    flex: 1 1 28ch;
+  /* En móvil la cifra va encima del texto; en escritorio, en una columna fija. */
+  .has-leads li {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  @media (min-width: 48rem) {
+    .has-leads li {
+      grid-template-columns: 13.5rem 1fr;
+    }
+  }
+
+  .decisions li p {
     font-size: clamp(1.05rem, 1rem + 0.25vw, 1.2rem);
     color: var(--text-2);
   }
@@ -180,13 +208,17 @@ const number = String(index + 1).padStart(2, '0');
   }
 
   .features {
+    margin-top: 3.25rem;
+  }
+
+  .features ul {
     display: grid;
     gap: 0.9rem;
-    margin-top: 2.25rem;
+    margin-top: 1.75rem;
   }
 
   @media (min-width: 48rem) {
-    .features {
+    .features ul {
       grid-template-columns: repeat(2, 1fr);
     }
   }
@@ -198,15 +230,16 @@ const number = String(index + 1).padStart(2, '0');
     border-radius: 0.75rem;
   }
 
-  .features h4 {
+  .features h5 {
     margin-top: 0.9rem;
     font-size: 1.3rem;
     letter-spacing: -0.01em;
   }
 
-  .features p {
+  .features li p {
     margin-top: 0.4rem;
     font-size: 1.05rem;
+    line-height: 1.6;
     color: var(--muted);
   }
 
