@@ -1,12 +1,25 @@
 ---
 import ArrowDown from '@lucide/astro/icons/arrow-down';
 import Award from '@lucide/astro/icons/award';
+import Bell from '@lucide/astro/icons/bell';
+import CalendarDays from '@lucide/astro/icons/calendar-days';
+import ChartColumn from '@lucide/astro/icons/chart-column';
+import Database from '@lucide/astro/icons/database';
 import ImageIcon from '@lucide/astro/icons/image';
+import KeyRound from '@lucide/astro/icons/key-round';
 import ListOrdered from '@lucide/astro/icons/list-ordered';
 import Mail from '@lucide/astro/icons/mail';
 import MapPin from '@lucide/astro/icons/map-pin';
+import Newspaper from '@lucide/astro/icons/newspaper';
+import NotebookPen from '@lucide/astro/icons/notebook-pen';
+import Percent from '@lucide/astro/icons/percent';
+import ScanText from '@lucide/astro/icons/scan-text';
+import ShieldCheck from '@lucide/astro/icons/shield-check';
+import Shirt from '@lucide/astro/icons/shirt';
 import Sparkles from '@lucide/astro/icons/sparkles';
 import Table from '@lucide/astro/icons/table';
+import Trophy from '@lucide/astro/icons/trophy';
+import UserRound from '@lucide/astro/icons/user-round';
 import UsersRound from '@lucide/astro/icons/users-round';
 import type { IconName } from '../lib/icons';
 
@@ -21,12 +34,25 @@ const { name, size = 24, class: className } = Astro.props;
 const lucide = {
   'arrow-down': ArrowDown,
   award: Award,
+  bell: Bell,
+  calendar: CalendarDays,
+  chart: ChartColumn,
+  database: Database,
   image: ImageIcon,
+  key: KeyRound,
   'list-ordered': ListOrdered,
   mail: Mail,
   'map-pin': MapPin,
+  newspaper: Newspaper,
+  notebook: NotebookPen,
+  percent: Percent,
+  scan: ScanText,
+  shield: ShieldCheck,
+  shirt: Shirt,
   sparkles: Sparkles,
   table: Table,
+  trophy: Trophy,
+  user: UserRound,
   users: UsersRound,
 } as const;
 
