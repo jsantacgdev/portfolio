@@ -13,7 +13,11 @@ const t = useTranslations(lang);
   <div class="intro">
     <p class="kicker">{t.about.kicker}</p>
     <h2 id="about-title">{t.about.title}</h2>
-    <p class="body">{t.about.body}</p>
+    <div class="body">
+      {t.about.body.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
   </div>
 
   <div class="timeline">
@@ -25,6 +29,13 @@ const t = useTranslations(lang);
           <p class:list={['meta', { highlight: item.highlight }]}>{item.meta}</p>
           {item.detail && <p class="detail">{item.detail}</p>}
         </li>
+      ))}
+    </ul>
+
+    <h3 class="label skills-heading">{t.about.skillsHeading}</h3>
+    <ul role="list" class="skills">
+      {t.about.skills.map((skill) => (
+        <li>{skill}</li>
       ))}
     </ul>
   </div>
@@ -59,7 +70,11 @@ const t = useTranslations(lang);
     color: var(--text-2);
   }
 
-  .timeline ul {
+  .body p + p {
+    margin-top: 1.1rem;
+  }
+
+  .timeline > ul:first-of-type {
     display: grid;
     gap: 2rem;
     margin-top: 1.75rem;
@@ -91,5 +106,24 @@ const t = useTranslations(lang);
     grid-column: 1 / -1;
     font-size: 1.1rem;
     color: var(--muted);
+  }
+
+  .skills-heading {
+    margin-top: 3.5rem;
+  }
+
+  .skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+  }
+
+  .skills li {
+    padding: 0.3rem 0.85rem;
+    font-size: 1rem;
+    color: var(--text);
+    background: var(--tag);
+    border-radius: 6px;
   }
 </style>
